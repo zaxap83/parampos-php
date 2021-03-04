@@ -62,6 +62,7 @@ class Bin extends Config
                 'bin' => $card['BIN'],
                 'posId' => $card['SanalPOS_ID'],
                 'posName' => $card['Kart_Banka'],
+                'cardData' => $card
             );
             if($this->bin != ''){
                 return $results[0];

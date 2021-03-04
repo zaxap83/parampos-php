@@ -13,6 +13,9 @@ use ParamposLibrary\UpdateInstallmentPlan;
 use ParamposLibrary\CardInformations;
 use ParamposLibrary\Payment;
 
+
+echo '<pre>';
+
 $testCards = [
     'ZİRAAT BANKASI Visa' => [ 'num' => '4546711234567894', 'y' => '2026', 'm' => '12', 'code' => '000' ],
     'ZİRAAT BANKASI Master' => [ 'num' => '5401341234567891', 'y' => '2026', 'm' => '12', 'code' => '000' ],
@@ -28,7 +31,7 @@ $testCards = [
     'Test Visa 2' => [ 'num' => '4444444444444444', 'y' => '2026', 'm' => '12', 'code' => '111' ],
 ];
 
-$cardKey = 'ZİRAAT BANKASI Master';
+$cardKey = 'ZİRAAT BANKASI Visa';
 
 $cardNum = $testCards[$cardKey]['num'];
 $cardYear = $testCards[$cardKey]['y'];
@@ -36,7 +39,9 @@ $cardMonth = $testCards[$cardKey]['m'];
 $cardCVC = $testCards[$cardKey]['code'];
 
 $cardInfoReq = new CardInformations($cardNum);
-$cardInfo = $cardInfoReq->get();
+$cardInfoData = $cardInfoReq->get();
+
+$cardInfo = $cardInfoData;
 
 $merchantPlanReq = new InstallmentPlanForUser();
 $merchantPlans = $merchantPlanReq->get();
@@ -56,6 +61,10 @@ foreach( $merchantPlans as $name => $plan ) {
         $cardInfo['user_plans']['MO_06'] = $plan[0]['MO_06'];
         $cardInfo['user_plans']['MO_07'] = $plan[0]['MO_07'];
         $cardInfo['user_plans']['MO_08'] = $plan[0]['MO_08'];
+        $cardInfo['user_plans']['MO_09'] = $plan[0]['MO_09'];
+        $cardInfo['user_plans']['MO_10'] = $plan[0]['MO_10'];
+        $cardInfo['user_plans']['MO_11'] = $plan[0]['MO_11'];
+        $cardInfo['user_plans']['MO_12'] = $plan[0]['MO_12'];
 
         break;
     }
@@ -99,9 +108,9 @@ $x->setExtraData3("");
 $x->setExtraData4("");
 $x->setExtraData5("");
 
-echo '<pre>';
-print_r($x);
-print_r($cardInfo);
-print_r($x->create());
+//print_r($merchantPlans); die;
+//print_r($x);
+print_r($cardInfoData);
+//print_r($x->create());
 
 echo '</pre>';
