@@ -64,7 +64,7 @@ foreach( $merchantPlans as $name => $plan ) {
     }
 }
 
-$orderID = 100035;
+$orderID = 100037;
 $transactionID = '1a34afa323356'.$orderID;
 
 $orderSumm = 500;
@@ -90,7 +90,7 @@ $x->setSuccessUrl("http://zaxap.asuscomm.com/webhook/setpaymentstatus/success");
 $x->setFailUrl("http://zaxap.asuscomm.com/webhook/setpaymentstatus/fail");
 $x->setOrderId($transactionID);
 $x->setOrderDescription("Test order $transactionID description text");
-$x->setInstallment("1");
+$x->setInstallment(0);
 $x->setTotalPrice($summFormated);
 $x->setTotalGeneralPrice($totalFormated);
 $x->setTransactionId($transactionID);
