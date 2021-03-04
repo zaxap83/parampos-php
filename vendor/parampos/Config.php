@@ -8,8 +8,8 @@ namespace param;
 
 class Config
 {
-    const TEST_SERVICE_URL = 'https://dmzws.ew.com.tr/turkpos.ws/service_turkpos_test.asmx?wsdl';
-    const PROD_SERVICE_URL = 'https://dmzws.ew.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl';
+    const TEST_SERVICE_URL = 'https://test-dmz.param.com.tr:4443/turkpos.ws/service_turkpos_test.asmx?wsdl';
+    const PROD_SERVICE_URL = 'https://dmzws.param.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl';
     const TEST_MODE_FLAG = 'TEST';
 
     public $serviceUrl;

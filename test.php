@@ -1,5 +1,8 @@
 <?php
 
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+
 include "vendor/autoload.php";
 
 use ParamposLibrary\TransactionQuery;
@@ -10,47 +13,95 @@ use ParamposLibrary\UpdateInstallmentPlan;
 use ParamposLibrary\CardInformations;
 use ParamposLibrary\Payment;
 
-//$x = new TransactionQuery( "", "1a34afa323356", "");
-//print_r($x->get());
+$testCards = [
+    'ZİRAAT BANKASI Visa' => [ 'num' => '4546711234567894', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'ZİRAAT BANKASI Master' => [ 'num' => '5401341234567891', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'FİNANSBANK Visa' => [ 'num' => '4022774022774026', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'FİNANSBANK Master' => [ 'num' => '5456165456165454', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'AKBANK Visa' => [ 'num' => '4355084355084358', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'AKBANK Master' => [ 'num' => '5571135571135575', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'İŞ BANKASI Visa' => [ 'num' => '4508034508034509', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'İŞ BANKASI Master' => [ 'num' => '5406675406675403', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'HALK BANKASI Visa' => [ 'num' => '4531444531442283', 'y' => '2026', 'm' => '12', 'code' => '000' ],
+    'HALK BANKASI Master' => [ 'num' => '5818775818772285', 'y' => '2026', 'm' => '12', 'code' => '001' ],
+    'Test Visa' => [ 'num' => '4242424242424242', 'y' => '2026', 'm' => '12', 'code' => '001' ],
+    'Test Visa 2' => [ 'num' => '4444444444444444', 'y' => '2026', 'm' => '12', 'code' => '111' ],
+];
 
-//$x = new TransactionAbstact( "21.01.2018 00:00:00", "22.01.2018 23:59:59");
-//print_r($x->get());
+$cardKey = 'ZİRAAT BANKASI Master';
 
-//$x = new InstallmentPlanForMerchant();
-//print_r($x->get());
+$cardNum = $testCards[$cardKey]['num'];
+$cardYear = $testCards[$cardKey]['y'];
+$cardMonth = $testCards[$cardKey]['m'];
+$cardCVC = $testCards[$cardKey]['code'];
 
-//$x = new InstallmentPlanForUser();
-//print_r($x->get());
+$cardInfoReq = new CardInformations($cardNum);
+$cardInfo = $cardInfoReq->get();
 
-//$x = new UpdateInstallmentPlan("13815");
-//$x->set(1, 0.0001);
-//print_r($x->update());
+$merchantPlanReq = new InstallmentPlanForUser();
+$merchantPlans = $merchantPlanReq->get();
 
-//$x = new CardInformations("498749");
-//print_r($x->get());
+foreach( $merchantPlans as $name => $plan ) {
+
+    $cardInfo['planPosName'] = $name;
+    $cardInfo['planData'] = $plan[0];
+
+    if( isset( $plan[0]['SanalPOS_ID'] ) && $plan[0]['SanalPOS_ID'] == $cardInfo['posId'] ) {
+
+        $cardInfo['user_plans']['MO_01'] = $plan[0]['MO_01'];
+        $cardInfo['user_plans']['MO_02'] = $plan[0]['MO_02'];
+        $cardInfo['user_plans']['MO_03'] = $plan[0]['MO_03'];
+        $cardInfo['user_plans']['MO_04'] = $plan[0]['MO_04'];
+        $cardInfo['user_plans']['MO_05'] = $plan[0]['MO_05'];
+        $cardInfo['user_plans']['MO_06'] = $plan[0]['MO_06'];
+        $cardInfo['user_plans']['MO_07'] = $plan[0]['MO_07'];
+        $cardInfo['user_plans']['MO_08'] = $plan[0]['MO_08'];
+
+        break;
+    }
+}
+
+$orderID = 100034;
+$transactionID = '1a34afa323356'.$orderID;
+
+$orderSumm = 100;
+$commission = 0;
+
+if( $cardInfo['user_plans']['MO_01'] ) $commission = $cardInfo['user_plans']['MO_01'];
+
+$total = $orderSumm + ( ($orderSumm * $commission) / 100);
+
+$summFormated = number_format( $orderSumm, 2, ',', '');
+$totalFormated = number_format( $total, 2, ',', '');
 
 $x = new Payment();
-$x->setPosId("1013");
-$x->setCardHolderName("asdas adas");
-$x->setCardNumber("4444444444444444");
-$x->setCardExpireYear("2022");
-$x->setCardExpireMonth("11");
-$x->setCardCvc("111");
-$x->setCardHolderPhone("");
-$x->setSuccessUrl("http://localhost/param-php-0.2/test.php?status=success");
-$x->setFailUrl("http://localhost/param-php-0.2/test.php?status=fail");
-$x->setOrderId("1a34afa323356");
-$x->setOrderDescription("");
+
+$x->setPosId($cardInfo['posId']);
+$x->setCardHolderName("Alex Zakharov");
+$x->setCardNumber($cardNum);
+$x->setCardExpireYear($cardYear);
+$x->setCardExpireMonth($cardMonth);
+$x->setCardCvc($cardCVC);
+$x->setCardHolderPhone("+380501232255");
+$x->setSuccessUrl("http://zaxap.asuscomm.com/webhook/setpaymentstatus/success");
+$x->setFailUrl("http://zaxap.asuscomm.com/webhook/setpaymentstatus/fail");
+$x->setOrderId($transactionID);
+$x->setOrderDescription("Test order $transactionID description text");
 $x->setInstallment("1");
-$x->setTotalPrice("1,00");
-$x->setTotalGeneralPrice("1,00");
-$x->setTransactionId("1a34afa323356");
+$x->setTotalPrice($summFormated);
+$x->setTotalGeneralPrice($totalFormated);
+$x->setTransactionId($transactionID);
 $x->setIpAddress("127.0.0.1");
-$x->setReferenceUrl("http://localhost/param-php-0.2/test.php");
+$x->setReferenceUrl("http://zaxap.asuscomm.com/webhook/setpaymentstatus/test");
 $x->setExtraData1("");
 $x->setExtraData2("");
 $x->setExtraData3("");
 $x->setExtraData4("");
 $x->setExtraData5("");
 
+echo '<pre>';
+print_r($x);
+print_r($cardInfo);
 print_r($x->create());
+
+echo '</pre>';

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Nurullah Iþýk
+ * User: Nurullah Iï¿½ï¿½k
  * Date: 31.01.2019
  * Time: 09:22
  */
@@ -41,7 +41,13 @@ class Config
      */
     public function set()
     {
-        $config = require_once __DIR__ . "/../config/config.php";
+        $config = [
+            'clientCode'     => '10738',
+            'clientUsername' => 'Test',
+            'clientPassword' => 'Test',
+            'guid'           => '0c13d406-873b-403b-9c09-a5766840d98c',
+            'mode'           => 'TEST'
+        ];
 
         $this->clientCode     = $config['clientCode'];
         $this->clientUsername = $config['clientUsername'];
