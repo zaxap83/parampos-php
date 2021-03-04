@@ -53,8 +53,11 @@ foreach( $merchantPlans as $name => $plan ) {
 
     if( isset( $plan[0]['SanalPOS_ID'] ) && $plan[0]['SanalPOS_ID'] == $cardInfo['posId'] ) {
 
-        for( $i = 1; $i < 12; $i++ ) {
-            $cardInfo['user_plans']['MO_0'.$i] = $plan[0]['MO_0'.$i];
+        for( $i = 1; $i <= 12; $i++ ) {
+            
+            $month = $i > 9 ? 'MO_'.$i : 'MO_0'.$i;
+
+            if( isset( $plan[0][$month] ) ) $cardInfo['user_plans'][$month] = $plan[0][$month];
         }
         
         break;
@@ -101,7 +104,7 @@ $x->setExtraData5("");
 
 //print_r($merchantPlans); die;
 print_r($x);
-print_r($cardInfoData);
+print_r($cardInfo);
 print_r($x->create()); //TP_Islem_Odeme_WNS or TP_Islem_Odeme
 
 echo '</pre>';
