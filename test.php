@@ -38,12 +38,12 @@ $cardYear = $testCards[$cardKey]['y'];
 $cardMonth = $testCards[$cardKey]['m'];
 $cardCVC = $testCards[$cardKey]['code'];
 
-$cardInfoReq = new CardInformations($cardNum);
+$cardInfoReq = new CardInformations($cardNum); //BIN_SanalPos
 $cardInfoData = $cardInfoReq->get();
 
 $cardInfo = $cardInfoData;
 
-$merchantPlanReq = new InstallmentPlanForUser();
+$merchantPlanReq = new InstallmentPlanForUser(); //TP_Ozel_Oran_SK_Liste
 $merchantPlans = $merchantPlanReq->get();
 
 foreach( $merchantPlans as $name => $plan ) {
@@ -102,6 +102,6 @@ $x->setExtraData5("");
 //print_r($merchantPlans); die;
 print_r($x);
 print_r($cardInfoData);
-print_r($x->create());
+print_r($x->create()); //TP_Islem_Odeme_WNS or TP_Islem_Odeme
 
 echo '</pre>';
