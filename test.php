@@ -53,27 +53,18 @@ foreach( $merchantPlans as $name => $plan ) {
 
     if( isset( $plan[0]['SanalPOS_ID'] ) && $plan[0]['SanalPOS_ID'] == $cardInfo['posId'] ) {
 
-        $cardInfo['user_plans']['MO_01'] = $plan[0]['MO_01'];
-        $cardInfo['user_plans']['MO_02'] = $plan[0]['MO_02'];
-        $cardInfo['user_plans']['MO_03'] = $plan[0]['MO_03'];
-        $cardInfo['user_plans']['MO_04'] = $plan[0]['MO_04'];
-        $cardInfo['user_plans']['MO_05'] = $plan[0]['MO_05'];
-        $cardInfo['user_plans']['MO_06'] = $plan[0]['MO_06'];
-        $cardInfo['user_plans']['MO_07'] = $plan[0]['MO_07'];
-        $cardInfo['user_plans']['MO_08'] = $plan[0]['MO_08'];
-        $cardInfo['user_plans']['MO_09'] = $plan[0]['MO_09'];
-        $cardInfo['user_plans']['MO_10'] = $plan[0]['MO_10'];
-        $cardInfo['user_plans']['MO_11'] = $plan[0]['MO_11'];
-        $cardInfo['user_plans']['MO_12'] = $plan[0]['MO_12'];
-
+        for( $i = 1; $i < 12; $i++ ) {
+            $cardInfo['user_plans']['MO_0'.$i] = $plan[0]['MO_0'.$i];
+        }
+        
         break;
     }
 }
 
-$orderID = 100034;
+$orderID = 100035;
 $transactionID = '1a34afa323356'.$orderID;
 
-$orderSumm = 100;
+$orderSumm = 500;
 $commission = 0;
 
 if( $cardInfo['user_plans']['MO_01'] ) $commission = $cardInfo['user_plans']['MO_01'];
@@ -109,8 +100,8 @@ $x->setExtraData4("");
 $x->setExtraData5("");
 
 //print_r($merchantPlans); die;
-//print_r($x);
+print_r($x);
 print_r($cardInfoData);
-//print_r($x->create());
+print_r($x->create());
 
 echo '</pre>';
